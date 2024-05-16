@@ -1,17 +1,16 @@
-# Laravel and Livewire Examples
+# Laravel Task Management System
 
-This repository contains examples of using Laravel 11 with Livewire. It provides several use cases demonstrating how to integrate Livewire components into a Laravel application.
-
+In this repo I developed a Task Management System with Laravel 11. You can control or contribute to the use of Model, Ajax, Controller.
 ## Demo Video
 [![LARAVEL_11_TASK_MANAGEMENT_SYSTEM](https://img.youtube.com/vi/_pf5jAt-eiw/0.jpg)](https://www.youtube.com/watch?v=_pf5jAt-eiw)
 
 ## Screenshots
 
 Laravel 11 Task Management System Screenshot
-![Livewire_Counter_Example](screenshots/ss_1.png)
+![Laravel_Task_Management_System](screenshots/ss_1.png)
 
 Laravel 11 Task Management System Screenshot 2
-![Livewire_Load_More_Example](screenshots/ss_2.png)
+![Laravel_Task_Management_System](screenshots/ss_2.png)
 
 
 ## Features
@@ -38,7 +37,6 @@ Laravel 11 Task Management System Screenshot 2
 Before you begin, ensure you have met the following requirements:
 - PHP >= 8.2
 - Composer installed globally
-- Node.js and npm installed
 
 ## Installation
 To install and set up the project locally, follow these steps:
