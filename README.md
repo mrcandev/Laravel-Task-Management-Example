@@ -35,7 +35,8 @@ Laravel 11 Task Management System Screenshot 2
 
 ## Prerequisites
 Before you begin, ensure you have met the following requirements:
-- PHP >= 8.2
+- PHP >= 8.2 
+- MySQL
 - Composer installed globally
 
 ## Installation
