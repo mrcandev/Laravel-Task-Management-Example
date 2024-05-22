@@ -462,7 +462,7 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            if (response.is_completed) {
+                            if (response.is_completed == 1) {
                                 listItem.css({'opacity': '0.5', 'text-decoration': 'line-through'});
                                 listItem.find('.badge').removeClass('bg-gradient-warning').addClass('bg-gradient-success').text('COMPLETED');
                                 iziToast.success({
