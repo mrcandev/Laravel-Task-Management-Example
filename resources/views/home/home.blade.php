@@ -127,8 +127,9 @@
                                                     <span aria-hidden="true">×</span>
                                                 </button>
                                             </div>
-                                            <form action="{{ route('tasks.update', ['id' => $task->id]) }}" method="post" enctype="multipart/form-data">
+                                            <form action="{{ route('tasks.update', $task) }}" method="post" enctype="multipart/form-data">
                                                 @csrf
+                                                @method('PUT')
                                                 <div class="modal-body">
 
                                                     <div class="row">
@@ -180,10 +181,14 @@
                                                     <p>Are you sure you want to delete this task?</p>
                                                 </div>
                                             </div>
-                                            <div class="modal-footer">
-                                                <a href="{{ route('tasks.delete', ['id' => $task->id]) }}" class="btn btn-danger">Yes, Delete</a>
+                                            <form action="{{ route('tasks.destroy', $task) }}" method="post">
+                                              @csrf
+                                              @method('DELETE')
+                                              <div class="modal-footer">
+                                                <button type="submit" class="btn btn-danger">Yes, Delete</button>
                                                 <button type="button" class="btn btn-link text-muted ml-auto" data-bs-dismiss="modal">Close</button>
-                                            </div>
+                                              </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -252,8 +257,9 @@
                                                     <span aria-hidden="true">×</span>
                                                 </button>
                                             </div>
-                                            <form action="{{ route('projects.update', ['id' => $project->id]) }}" method="post" enctype="multipart/form-data">
+                                            <form action="{{ route('projects.update', ['project' => $project]) }}" method="post" enctype="multipart/form-data">
                                                 @csrf
+                                                @method('PUT')
                                                 <div class="modal-body">
 
                                                     <div class="row">
@@ -300,10 +306,14 @@
                                                     <p>Are you sure you want to delete this project? Tasks that depend on it will also be deleted.</p>
                                                 </div>
                                             </div>
-                                            <div class="modal-footer">
-                                                <a href="{{ route('projects.delete', ['id' => $project->id]) }}" class="btn btn-danger">Yes, Delete</a>
+                                            <form action="{{ route('projects.destroy', $project) }}" method="post">
+                                              @csrf
+                                              @method('DELETE')
+                                              <div class="modal-footer">
+                                                <button type="submit" class="btn btn-danger">Yes, Delete</button>
                                                 <button type="button" class="btn btn-link text-muted ml-auto" data-bs-dismiss="modal">Close</button>
-                                            </div>
+                                              </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -349,7 +359,7 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <form action="{{ route('projects.insert') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('projects.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
 
@@ -391,7 +401,7 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <form action="{{ route('tasks.insert') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('tasks.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
 
