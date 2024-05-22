@@ -11,7 +11,6 @@ Route::resource('projects', ProjectsController::class)->only(['store', 'update',
 Route::resource('tasks', TasksController::class)->only(['store', 'update', 'destroy']);
 
 Route::prefix('tasks')->name('tasks.')->group(function (){
-    Route::post('toggle-completion/{id?}', [TasksController::class, 'toggleCompletion'])->name('toggleCompletion');
-    Route::get('filter', [TasksController::class, 'filter'])->name('filter');
+    Route::post('toggle-completion/{task?}', [TasksController::class, 'toggleCompletion'])->name('toggleCompletion');
     Route::post('update-priority', [TasksController::class, 'updatePriority'])->name('updatePriority');
 });

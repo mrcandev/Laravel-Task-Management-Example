@@ -103,7 +103,7 @@
                                             </span>
                                                 <span class="text-xs">Complete:
                                                 <span class="text-dark ms-sm-2 font-weight-bold">
-                                                    <input type="checkbox" class="toggle-completion" data-task-id="{{ $task->id }}" {{ $task->is_completed ? 'checked' : '' }}>
+                                                    <input type="checkbox" class="toggle-completion" data-task={{ $task }} data-task-url="{{ route('tasks.toggleCompletion', $task) }}" {{ $task->is_completed ? 'checked' : '' }}>
                                                 </span>
                                             </span>
                                             </div>
@@ -447,15 +447,18 @@
 
 
             $('.toggle-completion').change(function() {
-                var taskId = $(this).data('task-id');
+                var url = $(this).data('task-url');
+                var task = $(this).data('task');
                 var isChecked = $(this).is(':checked');
                 var listItem = $(this).closest('li');
 
                 $.ajax({
-                    url:  '<?php echo route('tasks.toggleCompletion'); ?>' + "/" + taskId,
+                    url:  url,
                     type: 'POST',
                     data: {
-                        _token: '{{ csrf_token() }}'
+                        _token: '{{ csrf_token() }}',
+                        is_completed: isChecked ? 1 : 0,
+                        task: task
                     },
                     success: function(response) {
                         if (response.success) {

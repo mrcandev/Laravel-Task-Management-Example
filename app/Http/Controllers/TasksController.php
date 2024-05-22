@@ -49,31 +49,14 @@ class TasksController extends Controller
     return redirect()->route('home.index');
   }
 
-
-  public function filter(Request $request)
+  public function toggleCompletion(Request $request, Task $task)
   {
-    $filters = $request->only(['project', 'is_completed', 'search']);
-
-    $tasks = Task::getAllTasksWithFilters($filters);
-
-    return view('home.index', compact('tasks'));
-  }
-
-
-  public function toggleCompletion(Request $request, $id)
-  {
-    $task = Task::find($id);
-
-    if (!$task) {
-      return response()->json(['error' => 'Task not found.'], 404);
-    }
-
-    $task->is_completed = !$task->is_completed;
-    $task->save();
+    $task->update([
+      'is_completed' => $request->get('is_completed')
+    ]);
 
     return response()->json(['success' => true, 'is_completed' => $task->is_completed]);
   }
-
 
   public function updatePriority(Request $request)
   {
