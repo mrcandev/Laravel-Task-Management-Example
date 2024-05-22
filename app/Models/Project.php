@@ -18,22 +18,4 @@ class Project extends Model
   protected $fillable = [
     'name', 'color',
   ];
-
-  /**
-   * Get all projects.
-   *
-   */
-  public static function getAllProjects($search = null)
-  {
-    $query = static::query();
-
-    // If there's a search criteria, filter projects based on it
-    if ($search !== null) {
-      $query->whereNull('deleted_at');
-      $query->where('name', 'like', '%' . $search . '%');
-      $query->orderBy('id', 'DESC');
-    }
-
-    return $query->get();
-  }
 }
