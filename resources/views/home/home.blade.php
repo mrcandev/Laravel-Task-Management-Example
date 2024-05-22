@@ -103,7 +103,7 @@
                                             </span>
                                                 <span class="text-xs">Complete:
                                                 <span class="text-dark ms-sm-2 font-weight-bold">
-                                                    <input type="checkbox" class="toggle-completion" data-task-id="{{ $task->id }}" {{ $task->is_completed ? 'checked' : '' }}>
+                                                    <input type="checkbox" class="toggle-completion" data-task={{ $task }} data-task-url="{{ route('tasks.toggleCompletion', $task) }}" {{ $task->is_completed ? 'checked' : '' }}>
                                                 </span>
                                             </span>
                                             </div>
@@ -127,8 +127,9 @@
                                                     <span aria-hidden="true">×</span>
                                                 </button>
                                             </div>
-                                            <form action="{{ route('tasks.update', ['id' => $task->id]) }}" method="post" enctype="multipart/form-data">
+                                            <form action="{{ route('tasks.update', $task) }}" method="post" enctype="multipart/form-data">
                                                 @csrf
+                                                @method('PUT')
                                                 <div class="modal-body">
 
                                                     <div class="row">
@@ -180,10 +181,14 @@
                                                     <p>Are you sure you want to delete this task?</p>
                                                 </div>
                                             </div>
-                                            <div class="modal-footer">
-                                                <a href="{{ route('tasks.delete', ['id' => $task->id]) }}" class="btn btn-danger">Yes, Delete</a>
+                                            <form action="{{ route('tasks.destroy', $task) }}" method="post">
+                                              @csrf
+                                              @method('DELETE')
+                                              <div class="modal-footer">
+                                                <button type="submit" class="btn btn-danger">Yes, Delete</button>
                                                 <button type="button" class="btn btn-link text-muted ml-auto" data-bs-dismiss="modal">Close</button>
-                                            </div>
+                                              </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -252,8 +257,9 @@
                                                     <span aria-hidden="true">×</span>
                                                 </button>
                                             </div>
-                                            <form action="{{ route('projects.update', ['id' => $project->id]) }}" method="post" enctype="multipart/form-data">
+                                            <form action="{{ route('projects.update', ['project' => $project]) }}" method="post" enctype="multipart/form-data">
                                                 @csrf
+                                                @method('PUT')
                                                 <div class="modal-body">
 
                                                     <div class="row">
@@ -300,10 +306,14 @@
                                                     <p>Are you sure you want to delete this project? Tasks that depend on it will also be deleted.</p>
                                                 </div>
                                             </div>
-                                            <div class="modal-footer">
-                                                <a href="{{ route('projects.delete', ['id' => $project->id]) }}" class="btn btn-danger">Yes, Delete</a>
+                                            <form action="{{ route('projects.destroy', $project) }}" method="post">
+                                              @csrf
+                                              @method('DELETE')
+                                              <div class="modal-footer">
+                                                <button type="submit" class="btn btn-danger">Yes, Delete</button>
                                                 <button type="button" class="btn btn-link text-muted ml-auto" data-bs-dismiss="modal">Close</button>
-                                            </div>
+                                              </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -349,7 +359,7 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <form action="{{ route('projects.insert') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('projects.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
 
@@ -391,7 +401,7 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <form action="{{ route('tasks.insert') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('tasks.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
 
@@ -437,19 +447,22 @@
 
 
             $('.toggle-completion').change(function() {
-                var taskId = $(this).data('task-id');
+                var url = $(this).data('task-url');
+                var task = $(this).data('task');
                 var isChecked = $(this).is(':checked');
                 var listItem = $(this).closest('li');
 
                 $.ajax({
-                    url:  '<?php echo route('tasks.toggleCompletion'); ?>' + "/" + taskId,
+                    url:  url,
                     type: 'POST',
                     data: {
-                        _token: '{{ csrf_token() }}'
+                        _token: '{{ csrf_token() }}',
+                        is_completed: isChecked ? 1 : 0,
+                        task: task
                     },
                     success: function(response) {
                         if (response.success) {
-                            if (response.is_completed) {
+                            if (response.is_completed == 1) {
                                 listItem.css({'opacity': '0.5', 'text-decoration': 'line-through'});
                                 listItem.find('.badge').removeClass('bg-gradient-warning').addClass('bg-gradient-success').text('COMPLETED');
                                 iziToast.success({
