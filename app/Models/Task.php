@@ -8,89 +8,61 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Task extends Model
 {
-    use HasFactory, SoftDeletes;
+  use HasFactory, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     */
-    protected $fillable = [
-        'project', 'name', 'priority', 'is_completed'
-    ];
+  /**
+   * The attributes that are mass assignable.
+   *
+   */
+  protected $fillable = [
+    'project', 'name', 'priority', 'is_completed'
+  ];
 
-    /**
-     * Get all tasks.
-     *
-     */
-    public static function getAllTasks($search = null)
-    {
-        $query = static::query();
+  /**
+   * Get all tasks.
+   *
+   */
+  public static function getAllTasks($search = null)
+  {
+    $query = static::query();
 
-        // If there's a search criteria, filter tasks based on it
-        if ($search !== null) {
-            $query->whereNull('tasks.deleted_at');
-            $query->where('tasks.name', 'like', '%' . $search . '%');
-            $query->join('projects', 'tasks.project', '=', 'projects.id');
-            $query->select('tasks.*', 'projects.name as project_name', 'projects.color as project_color');
-            $query->orderBy('tasks.priority', 'ASC'); // Order by priority
-        } else {
-            $query->whereNull('tasks.deleted_at');
-            $query->join('projects', 'tasks.project', '=', 'projects.id');
-            $query->select('tasks.*', 'projects.name as project_name', 'projects.color as project_color');
-            $query->orderBy('tasks.priority', 'ASC'); // Order by priority
-        }
-
-        return $query->get();
+    // If there's a search criteria, filter tasks based on it
+    if ($search !== null) {
+      $query->whereNull('tasks.deleted_at');
+      $query->where('tasks.name', 'like', '%' . $search . '%');
+      $query->join('projects', 'tasks.project', '=', 'projects.id');
+      $query->select('tasks.*', 'projects.name as project_name', 'projects.color as project_color');
+      $query->orderBy('tasks.priority', 'ASC'); // Order by priority
+    } else {
+      $query->whereNull('tasks.deleted_at');
+      $query->join('projects', 'tasks.project', '=', 'projects.id');
+      $query->select('tasks.*', 'projects.name as project_name', 'projects.color as project_color');
+      $query->orderBy('tasks.priority', 'ASC'); // Order by priority
     }
 
-    /**
-     * Get all tasks and optionally filter them.
-     *
-     */
-    public static function getAllTasksWithFilters($filters = [])
-    {
-        $query = static::query();
+    return $query->get();
+  }
 
-        $query->join('projects', 'tasks.project', '=', 'projects.id')
-            ->select('tasks.*', 'projects.name as project_name', 'projects.color as project_color')
-            ->whereNull('tasks.deleted_at');
+  /**
+   * Get all tasks and optionally filter them.
+   *
+   */
+  public static function getAllTasksWithFilters($filters = [])
+  {
+    $query = static::query();
 
-        if (isset($filters['project'])) {
-            $query->where('tasks.project', $filters['project']);
-        }
+    $query->join('projects', 'tasks.project', '=', 'projects.id')
+      ->select('tasks.*', 'projects.name as project_name', 'projects.color as project_color')
+      ->whereNull('tasks.deleted_at');
 
-        if (isset($filters['is_completed'])) {
-            $query->where('tasks.is_completed', $filters['is_completed']);
-        }
-
-        return $query->orderBy('tasks.priority', 'ASC')->get();
+    if (isset($filters['project'])) {
+      $query->where('tasks.project', $filters['project']);
     }
 
-
-    /**
-     * Create a new task.
-     *
-     */
-    public static function createTask(array $data)
-    {
-        return static::create($data);
+    if (isset($filters['is_completed'])) {
+      $query->where('tasks.is_completed', $filters['is_completed']);
     }
 
-    /**
-     * Update a task.
-     *
-     */
-    public function updateTask(array $data)
-    {
-        return $this->update($data);
-    }
-
-    /**
-     * Soft delete a task.
-     *
-     */
-    public function deleteTask()
-    {
-        return $this->delete();
-    }
+    return $query->orderBy('tasks.priority', 'ASC')->get();
+  }
 }
